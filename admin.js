@@ -40,6 +40,7 @@ const authPanel = document.getElementById("auth-panel");
 const dashboardPanel = document.getElementById("dashboard-panel");
 const logoutBtn = document.getElementById("logout-btn");
 const adminPasswordInput = document.getElementById("admin-password");
+const togglePasswordBtn = document.getElementById("toggle-password-btn");
 const loginBtn = document.getElementById("admin-login-btn");
 const refreshBtn = document.getElementById("refresh-data-btn");
 const projectList = document.getElementById("project-list");
@@ -105,6 +106,15 @@ function handleLogin() {
 
 function handleLogout() {
   setAuthenticated(false);
+}
+
+function togglePasswordVisibility() {
+  if (!adminPasswordInput || !togglePasswordBtn) return;
+
+  const isPasswordHidden = adminPasswordInput.type === "password";
+  adminPasswordInput.type = isPasswordHidden ? "text" : "password";
+  togglePasswordBtn.textContent = isPasswordHidden ? "Hide" : "Show";
+  togglePasswordBtn.setAttribute("aria-label", isPasswordHidden ? "Hide password" : "Show password");
 }
 
 function handlePasswordUpdate(event) {
@@ -394,6 +404,7 @@ async function deleteProject(id) {
 }
 
 if (loginBtn) loginBtn.addEventListener("click", handleLogin);
+if (togglePasswordBtn) togglePasswordBtn.addEventListener("click", togglePasswordVisibility);
 if (logoutBtn) logoutBtn.addEventListener("click", handleLogout);
 if (refreshBtn) refreshBtn.addEventListener("click", refreshData);
 if (newProjectBtn) newProjectBtn.addEventListener("click", () => openProjectModal());
