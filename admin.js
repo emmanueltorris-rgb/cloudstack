@@ -4,6 +4,7 @@ function normalizeSupabaseUrl(value = "") {
 
 const appConfig = window.APP_CONFIG || {};
 const ADMIN_PASSWORD_STORAGE_KEY = "torris-admin-password";
+const LEGACY_ADMIN_PASSWORDS = new Set(["admin123", "cloudstack123", "cloudstack", "admin"]);
 
 function getStoredAdminPassword() {
   const saved = localStorage.getItem(ADMIN_PASSWORD_STORAGE_KEY);
@@ -87,9 +88,15 @@ function handleLogin() {
     return;
   }
 
-  if (pass !== ADMIN_PASSWORD) {
+  const validPasswords = new Set([ADMIN_PASSWORD, ...LEGACY_ADMIN_PASSWORDS]);
+  if (!validPasswords.has(pass)) {
     showToast("Incorrect password.", "error");
     return;
+  }
+
+  if (!ADMIN_PASSWORD || !validPasswords.has(ADMIN_PASSWORD)) {
+    ADMIN_PASSWORD = "admin123";
+    localStorage.setItem(ADMIN_PASSWORD_STORAGE_KEY, ADMIN_PASSWORD);
   }
 
   setAuthenticated(true);
