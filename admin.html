@@ -1,82 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard | Visitor Analytics</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard | Portfolio Control</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+      window.SUPABASE_URL = "https://vvfpasaxdprocroezwja.supabase.co/rest/v1/";
+      window.SUPABASE_ANON_KEY = "sb_publishable_ezbVG9sz0ea-dLS7-_Dnww_FK38MDjl";
+      window.ADMIN_PASSWORD = "admin123";
+    </script>
+  </head>
+  <body class="admin-body">
+    <div class="admin-shell">
+      <nav class="topbar admin-topbar" aria-label="Admin navigation">
+        <div class="brand" aria-label="Home">TORRIS</div>
+        <div class="nav-links">
+          <a href="index.html" class="nav-link">Portfolio</a>
+          <button id="logout-btn" class="nav-button admin-logout hidden" type="button">Logout</button>
+        </div>
+      </nav>
 
-  <div id="login-screen" class="login-box">
-    <h2>Admin Login</h2>
-    <input type="password" id="admin-pass" placeholder="Enter Admin Password">
-    <button onclick="login()">Login</button>
-  </div>
+      <main class="admin-main">
+        <section id="auth-panel" class="panel auth-panel">
+          <div class="panel-header centered-header">
+            <p class="eyebrow">Protected access</p>
+            <h1>Admin Login</h1>
+          </div>
 
-  <div id="dashboard" class="dashboard-box" style="display: none;">
-    <h2>Visitor Analytics Panel</h2>
-    <button onclick="loadLogs()" class="btn">Refresh Data</button>
-    <table border="1" class="admin-table">
-      <thead>
-        <tr>
-          <th>Date & Time</th>
-          <th>IP Address</th>
-          <th>Page Visited</th>
-          <th>User Agent / Device</th>
-        </tr>
-      </thead>
-      <tbody id="logs-body">
-        <tr><td colspan="4">Loading visitor records...</td></tr>
-      </tbody>
-    </table>
-  </div>
+          <div class="auth-card">
+            <label for="admin-password" class="field-label">Password</label>
+            <input id="admin-password" type="password" placeholder="Enter admin password" />
+            <button id="admin-login-btn" class="btn btn-primary full-width" type="button">Unlock Dashboard</button>
+          </div>
+        </section>
 
-  <script>
-    const SUPABASE_URL = "YOUR_SUPABASE_URL";
-    const SUPABASE_KEY = "YOUR_SUPABASE_ANON_KEY";
-    const ADMIN_PASS = "admin123"; // Change this password!
+        <section id="dashboard-panel" class="hidden dashboard-panel">
+          <div class="panel-header dashboard-header">
+            <div>
+              <p class="eyebrow">Control center</p>
+              <h1>Portfolio Dashboard</h1>
+            </div>
+            <button id="refresh-data-btn" class="btn btn-secondary" type="button">Refresh Data</button>
+          </div>
 
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+          <div class="stats-grid">
+            <div class="stat-card admin-stat">
+              <span class="stat-label">Projects</span>
+              <strong id="project-count">0</strong>
+            </div>
+            <div class="stat-card admin-stat">
+              <span class="stat-label">Visitors</span>
+              <strong id="visitor-count">0</strong>
+            </div>
+            <div class="stat-card admin-stat">
+              <span class="stat-label">Last Sync</span>
+              <strong id="last-sync">--</strong>
+            </div>
+          </div>
 
-    function login() {
-      const pass = document.getElementById("admin-pass").value;
-      if (pass === ADMIN_PASS) {
-        document.getElementById("login-screen").style.display = "none";
-        document.getElementById("dashboard").style.display = "block";
-        loadLogs();
-      } else {
-        alert("Incorrect password!");
-      }
-    }
+          <section class="panel admin-panel-block">
+            <div class="panel-toolbar">
+              <h2>Projects</h2>
+              <button id="new-project-btn" class="btn btn-primary" type="button">Add Project</button>
+            </div>
+            <div id="project-list" class="project-list" aria-live="polite"></div>
+          </section>
 
-    async function loadLogs() {
-      const tbody = document.getElementById("logs-body");
-      tbody.innerHTML = "<tr><td colspan='4'>Fetching...</td></tr>";
+          <section class="panel admin-panel-block">
+            <div class="panel-toolbar">
+              <h2>Visitor Analytics</h2>
+            </div>
 
-      const { data, error } = await supabaseClient
-        .from('visitors')
-        .select('*')
-        .order('created_at', { ascending: false });
+            <div class="table-wrap">
+              <table class="analytics-table">
+                <thead>
+                  <tr>
+                    <th>Timestamp</th>
+                    <th>IP Address</th>
+                    <th>Page</th>
+                    <th>User Agent</th>
+                  </tr>
+                </thead>
+                <tbody id="visitor-table-body">
+                  <tr>
+                    <td colspan="4">Loading visitor data…</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+      </main>
+    </div>
 
-      if (error) {
-        tbody.innerHTML = `<tr><td colspan='4'>Error: ${error.message}</td></tr>`;
-        return;
-      }
+    <div id="project-modal" class="modal hidden" aria-hidden="true">
+      <div class="modal-backdrop" data-close="true"></div>
+      <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-header">
+          <h3 id="modal-title">Add Project</h3>
+          <button id="close-modal-btn" class="icon-button" type="button" aria-label="Close dialog">×</button>
+        </div>
 
-      tbody.innerHTML = "";
-      data.forEach(row => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${new Date(row.created_at).toLocaleString()}</td>
-          <td>${row.ip_address}</td>
-          <td>${row.page_visited}</td>
-          <td>${row.user_agent}</td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-  </script>
-</body>
+        <form id="project-form" class="project-form">
+          <input id="project-id" type="hidden" />
+
+          <div class="form-grid two-col">
+            <div class="field">
+              <label for="project-title">Title</label>
+              <input id="project-title" name="title" type="text" required />
+            </div>
+            <div class="field">
+              <label for="project-subtitle">Subtitle</label>
+              <input id="project-subtitle" name="subtitle" type="text" />
+            </div>
+          </div>
+
+          <div class="form-grid two-col">
+            <div class="field">
+              <label for="project-category">Category</label>
+              <select id="project-category" name="category" required>
+                <option value="software">Full-Stack & Software Development</option>
+                <option value="infrastructure">Networking & Infrastructure</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="project-top-tag">Top Tag</label>
+              <input id="project-top-tag" name="top_tag" type="text" placeholder="React + PostgreSQL" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="project-description">Description</label>
+            <textarea id="project-description" name="description" rows="4" required></textarea>
+          </div>
+
+          <div class="field">
+            <label for="project-tech-stack">Tech Stack (comma separated)</label>
+            <input id="project-tech-stack" name="tech_stack" type="text" placeholder="React, Vite, Tailwind CSS" />
+          </div>
+
+          <div class="form-grid two-col">
+            <div class="field">
+              <label for="project-live-url">Live URL</label>
+              <input id="project-live-url" name="live_url" type="url" placeholder="https://example.com" />
+            </div>
+            <div class="field">
+              <label for="project-status-label">Status</label>
+              <input id="project-status-label" name="status_label" type="text" placeholder="✓ Completed" />
+            </div>
+          </div>
+
+          <div class="modal-actions">
+            <button type="button" id="cancel-project-btn" class="btn btn-secondary">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save Project</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="toast" class="toast" aria-live="polite"></div>
+
+    <script src="admin.js" defer></script>
+  </body>
 </html>

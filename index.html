@@ -1,84 +1,145 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Emmanuel Torris | Portfolio</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Emmanuel Torris — full-stack engineer and networking specialist building resilient digital systems."
+    />
+    <title>Emmanuel Torris | Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+      window.SUPABASE_URL = "YOUR_SUPABASE_URL";
+      window.SUPABASE_ANON_KEY = "sb_publishable_ezbVG9sz0ea-dLS7-_Dnww_FK38MDjl";
+    </script>
+  </head>
+  <body>
+    <div class="shell">
+      <nav class="topbar" aria-label="Main navigation">
+        <div class="brand" aria-label="Emmanuel Torris home">TORRIS</div>
+        <div class="nav-links">
+          <a href="#home" class="nav-link">Home</a>
+          <a href="#projects" class="nav-link">Projects</a>
+          <a href="#contact" class="nav-link">Contact</a>
+          <a href="admin.html" class="nav-button">Admin</a>
+        </div>
+      </nav>
 
-  <nav>
-    <div class="logo">Emmanuel Torris</div>
-    <ul>
-      <li><a href="#about">About</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#contact">Contact</a></li>
-      <li><a href="admin.html" class="admin-link">Admin Portal</a></li>
-    </ul>
-  </nav>
+      <header id="home" class="hero">
+        <div class="eyebrow">Full-Stack Engineer • Network Systems Specialist</div>
+        <h1>
+          Building reliable systems that connect people,
+          <span>technology, and opportunity.</span>
+        </h1>
+        <p class="lead">
+          I design, build, and optimize digital products for modern businesses — from
+          web applications and dashboards to resilient network infrastructure and operational tooling.
+        </p>
 
-  <header class="hero">
-    <h1>Hi, I'm Emmanuel Torris</h1>
-    <p>Network Engineer & Full-Stack Web Developer</p>
-    <a href="#projects" class="btn">View My Work</a>
-  </header>
+        <div class="hero-actions">
+          <a href="#projects" class="btn btn-primary">View Projects</a>
+          <a href="#contact" class="btn btn-secondary">Let’s Talk</a>
+        </div>
 
-  <section id="about" class="container">
-    <h2>About Me</h2>
-    <p>I build web applications, ISP management tools, and networking solutions.</p>
-  </section>
+        <div class="stats-row" aria-label="Quick profile stats">
+          <div class="stat-card">
+            <strong>8+</strong>
+            <span>Years building digital systems</span>
+          </div>
+          <div class="stat-card">
+            <strong>20+</strong>
+            <span>Projects delivered</span>
+          </div>
+          <div class="stat-card">
+            <strong>99.9%</strong>
+            <span>Operational focus</span>
+          </div>
+        </div>
+      </header>
 
-  <section id="projects" class="container">
-    <h2>Key Projects</h2>
-    <div class="grid">
-      <div class="card">
-        <h3>WiFi Billing System</h3>
-        <p>ISP management tool for Hyptech Networks.</p>
-      </div>
-      <div class="card">
-        <h3>Starlink Hardware Mod</h3>
-        <p>Power supply bypass for Gen 2 routers.</p>
-      </div>
-      <div class="card">
-        <h3>Jaluto Shop</h3>
-        <p>E-commerce interface for local business.</p>
-      </div>
+      <main>
+        <section id="projects" class="section">
+          <div class="section-heading">
+            <span>Selected work</span>
+            <h2>Portfolio</h2>
+          </div>
+
+          <div class="project-group">
+            <div class="group-title-row">
+              <h3>Full-Stack & Software Development</h3>
+            </div>
+            <div id="software-projects" class="project-grid" aria-live="polite"></div>
+          </div>
+
+          <div class="project-group">
+            <div class="group-title-row">
+              <h3>Networking & Infrastructure</h3>
+            </div>
+            <div id="infrastructure-projects" class="project-grid" aria-live="polite"></div>
+          </div>
+        </section>
+
+        <section id="contact" class="section contact-section">
+          <div class="section-heading">
+            <span>Connect</span>
+            <h2>Contact</h2>
+          </div>
+
+          <div class="contact-panel">
+            <div class="contact-copy">
+              <p>
+                Need a technical partner to design, deploy, or optimize your platform?
+                Share a quick summary and I’ll respond with the most practical next steps.
+              </p>
+              <ul class="contact-list">
+                <li><span>Focus</span> Web platforms, network operations, product strategy</li>
+                <li><span>Email</span> torrisemanuel@gmail.com</li>
+                <li><span>Phone</span> 0708319101</li>
+                <li><span>Location</span> Remote / Regional Support</li>
+              </ul>
+            </div>
+
+            <form id="contact-form" class="contact-form" novalidate>
+              <div class="form-grid">
+                <div class="field">
+                  <label for="name">Name</label>
+                  <input id="name" name="name" type="text" placeholder="Your name" required />
+                </div>
+
+                <div class="field">
+                  <label for="email">Email</label>
+                  <input id="email" name="email" type="email" placeholder="you@example.com" required />
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="subject">Subject</label>
+                <input id="subject" name="subject" type="text" placeholder="How can I help?" required />
+              </div>
+
+              <div class="field">
+                <label for="message">Message</label>
+                <textarea id="message" name="message" rows="5" placeholder="Tell me about your project or challenge..." required></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary full-width">Send Message</button>
+            </form>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <p>© 2026 Emmanuel Torris. Built for resilient digital experiences.</p>
+      </footer>
     </div>
-  </section>
 
-  <section id="contact" class="container">
-    <h2>Get In Touch</h2>
-    <p>Email: emmanuel@example.com</p>
-  </section>
+    <div id="toast" class="toast" aria-live="polite"></div>
 
-  <!-- Visitor Tracker Script -->
-  <script>
-    const SUPABASE_URL = "YOUR_SUPABASE_URL";
-    const SUPABASE_KEY = "YOUR_SUPABASE_ANON_KEY";
-    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-    async function logVisitor() {
-      try {
-        const res = await fetch('https://api.ipify.org?format=json');
-        const data = await res.json();
-        const visitorIp = data.ip;
-
-        await supabaseClient
-          .from('visitors')
-          .insert([
-            { 
-              ip_address: visitorIp, 
-              page_visited: window.location.pathname, 
-              user_agent: navigator.userAgent 
-            }
-          ]);
-      } catch (err) {
-        console.error("Tracker error:", err);
-      }
-    }
-    logVisitor();
-  </script>
-</body>
+    <script src="app.js" defer></script>
+  </body>
 </html>
