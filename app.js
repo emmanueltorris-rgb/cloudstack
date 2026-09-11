@@ -28,6 +28,97 @@ function showToast(message, type = "success") {
   }, 2500);
 }
 
+const DEFAULT_PROJECTS = [
+  {
+    title: "LearnCode",
+    subtitle: "Lead Developer (Solo Project)",
+    category: "software",
+    description:
+      "A sleek, fully functional peer learning platform designed for tech students to share notes, tutorials, and collaborate asynchronously.",
+    top_tag: "React + PostgreSQL",
+    tech_stack: ["React", "Vite", "Tailwind CSS", "GoBackend (Fiber)"],
+    status_label: "✓ Dashboard & Live Link",
+    live_url: "#",
+  },
+  {
+    title: "HotelBook",
+    subtitle: "Full-Stack Developer",
+    category: "software",
+    description:
+      "Complete hotel booking and management system with seamless authentication flow and integrated M-Pesa STK Push payment gateway for instant confirmations.",
+    top_tag: "Full-Stack",
+    tech_stack: ["React", "Tailwind CSS", "Firebase / SQL", "Express", "M-Pesa API"],
+    status_label: "✓ Backend Deployed",
+    live_url: "#",
+  },
+  {
+    title: "Interactive Voting Poll",
+    subtitle: "Frontend & State Architect (Group Project)",
+    category: "software",
+    description:
+      "Modern voting and polling web application with core state management and component architecture to keep user votes accurate across sessions.",
+    top_tag: "React + State Management",
+    tech_stack: ["React", "Tailwind CSS", "Zustand", "State Management"],
+    status_label: "✓ Completed & Preserved",
+    live_url: "#",
+  },
+  {
+    title: "Plantshop",
+    subtitle: "Developer",
+    category: "software",
+    description:
+      "E-commerce lab assignment focused on mastering React hooks, managing local cart states, and building responsive UI layouts.",
+    top_tag: "React / Labs",
+    tech_stack: ["React", "Zustand", "Context API"],
+    status_label: "✓ Completed",
+    live_url: "#",
+  },
+  {
+    title: "Client VPN Routing",
+    subtitle: "Infrastructure Engineer",
+    category: "infrastructure",
+    description:
+      "Deploying secure, isolated virtual private networks on client-edge routers to protect business data traffic and optimize local routing configurations.",
+    top_tag: "Infrastructure",
+    tech_stack: ["MikroTik RouterOS", "VPN Setup", "Linux", "Edge Deployment"],
+    status_label: "✓ Active Deployment",
+    live_url: "#",
+  },
+  {
+    title: "Starlink Commercial Architecture",
+    subtitle: "Infrastructure Designer & Implementer",
+    category: "infrastructure",
+    description:
+      "Designing customized, high-capacity wireless architectures for recreational parks and hospitality environments with smart bandwidth capping, client isolation, and M-Pesa billing.",
+    top_tag: "Enterprise Infrastructure",
+    tech_stack: ["Starlink Gen 2/3", "MikroTik Gateway", "PoE Switching", "Access Points", "M-Pesa Integration"],
+    status_label: "✓ Production Ready",
+    live_url: "#",
+  },
+  {
+    title: "Managed Wi-Fi Infrastructure & Network Deployments",
+    subtitle: "Network Architect & Deployment Engineer",
+    category: "infrastructure",
+    description:
+      "Expanding high-speed connectivity across the Narok region through end-to-end local Wi-Fi architecture. Specialized in deploying managed access points, optimizing channel interference, and establishing secure guest/private network segregation.",
+    top_tag: "WiFi Infrastructure",
+    tech_stack: ["Managed Access Points", "Bandwidth Management", "Channel Optimization", "Network Segregation", "Commercial Deployment"],
+    status_label: "✓ Active Operations",
+    live_url: "#",
+  },
+  {
+    title: "Full-Spectrum CCTV Surveillance Systems",
+    subtitle: "Security Systems Designer & Implementer",
+    category: "infrastructure",
+    description:
+      "Designing and deploying end-to-end security surveillance solutions across Narok. Handling all camera topologies, including High-Definition IP systems, Analog HD-TVI systems, Smart PTZ tracking cameras, and off-grid Solar/Wireless setups.",
+    top_tag: "Security Infrastructure",
+    tech_stack: ["HD-IP Cameras", "Analog HD-TVI", "Smart PTZ Control", "Solar/Wireless", "NVR/DVR Setup", "Remote Tracking"],
+    status_label: "✓ Multiple Deployments",
+    live_url: "#",
+  },
+];
+
 function formatProjectStatus(label) {
   return (label || "✓ Active Deployment").trim();
 }
@@ -67,15 +158,38 @@ function renderProjectCard(project) {
   `;
 }
 
+function renderSeedProjects() {
+  const softwareRoot = document.getElementById("software-projects");
+  const infrastructureRoot = document.getElementById("infrastructure-projects");
+
+  if (!softwareRoot || !infrastructureRoot) return;
+
+  const softwareProjects = DEFAULT_PROJECTS.filter((project) => project.category === "software");
+  const infrastructureProjects = DEFAULT_PROJECTS.filter((project) => project.category === "infrastructure");
+
+  softwareRoot.innerHTML = softwareProjects.map(renderProjectCard).join("");
+  infrastructureRoot.innerHTML = infrastructureProjects.map(renderProjectCard).join("");
+}
+
 async function loadProjects() {
   const softwareRoot = document.getElementById("software-projects");
   const infrastructureRoot = document.getElementById("infrastructure-projects");
 
   if (!softwareRoot || !infrastructureRoot) return;
 
+  const fallbackProjects = DEFAULT_PROJECTS;
+
   if (!supabase) {
-    softwareRoot.innerHTML = '<p class="empty-state">Supabase configuration is missing. Add your project URL and anon key.</p>';
-    infrastructureRoot.innerHTML = '<p class="empty-state">Supabase configuration is missing. Add your project URL and anon key.</p>';
+    const softwareProjects = fallbackProjects.filter((project) => project.category === "software");
+    const infrastructureProjects = fallbackProjects.filter((project) => project.category === "infrastructure");
+
+    softwareRoot.innerHTML = softwareProjects.length
+      ? softwareProjects.map(renderProjectCard).join("")
+      : '<p class="empty-state">No software projects available.</p>';
+
+    infrastructureRoot.innerHTML = infrastructureProjects.length
+      ? infrastructureProjects.map(renderProjectCard).join("")
+      : '<p class="empty-state">No infrastructure projects available.</p>';
     return;
   }
 
@@ -87,8 +201,9 @@ async function loadProjects() {
 
     if (error) throw error;
 
-    const softwareProjects = (data || []).filter((project) => project.category === "software");
-    const infrastructureProjects = (data || []).filter((project) => project.category === "infrastructure");
+    const projectSource = data && data.length ? data : fallbackProjects;
+    const softwareProjects = projectSource.filter((project) => project.category === "software");
+    const infrastructureProjects = projectSource.filter((project) => project.category === "infrastructure");
 
     softwareRoot.innerHTML = softwareProjects.length
       ? softwareProjects.map(renderProjectCard).join("")
@@ -99,9 +214,17 @@ async function loadProjects() {
       : '<p class="empty-state">No infrastructure projects available.</p>';
   } catch (error) {
     console.error("Failed to load projects:", error);
-    showToast("Unable to load portfolio projects.", "error");
-    softwareRoot.innerHTML = '<p class="empty-state">Unable to load projects.</p>';
-    infrastructureRoot.innerHTML = '<p class="empty-state">Unable to load projects.</p>';
+    const softwareProjects = fallbackProjects.filter((project) => project.category === "software");
+    const infrastructureProjects = fallbackProjects.filter((project) => project.category === "infrastructure");
+
+    softwareRoot.innerHTML = softwareProjects.length
+      ? softwareProjects.map(renderProjectCard).join("")
+      : '<p class="empty-state">Unable to load projects.</p>';
+
+    infrastructureRoot.innerHTML = infrastructureProjects.length
+      ? infrastructureProjects.map(renderProjectCard).join("")
+      : '<p class="empty-state">Unable to load projects.</p>';
+    showToast("Using default portfolio data.", "error");
   }
 }
 
@@ -188,6 +311,7 @@ async function handleContactSubmit(event) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  renderSeedProjects();
   loadProjects();
   logVisitor();
 
