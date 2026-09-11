@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emmanuel Torris | Portfolio</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+  <nav>
+    <div class="logo">Emmanuel Torris</div>
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="admin.html" class="admin-link">Admin Portal</a></li>
+    </ul>
+  </nav>
+
+  <header class="hero">
+    <h1>Hi, I'm Emmanuel Torris</h1>
+    <p>Network Engineer & Full-Stack Web Developer</p>
+    <a href="#projects" class="btn">View My Work</a>
+  </header>
+
+  <section id="about" class="container">
+    <h2>About Me</h2>
+    <p>I build web applications, ISP management tools, and networking solutions.</p>
+  </section>
+
+  <section id="projects" class="container">
+    <h2>Key Projects</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>WiFi Billing System</h3>
+        <p>ISP management tool for Hyptech Networks.</p>
+      </div>
+      <div class="card">
+        <h3>Starlink Hardware Mod</h3>
+        <p>Power supply bypass for Gen 2 routers.</p>
+      </div>
+      <div class="card">
+        <h3>Jaluto Shop</h3>
+        <p>E-commerce interface for local business.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="container">
+    <h2>Get In Touch</h2>
+    <p>Email: emmanuel@example.com</p>
+  </section>
+
+  <!-- Visitor Tracker Script -->
+  <script>
+    const SUPABASE_URL = "YOUR_SUPABASE_URL";
+    const SUPABASE_KEY = "YOUR_SUPABASE_ANON_KEY";
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    async function logVisitor() {
+      try {
+        const res = await fetch('https://api.ipify.org?format=json');
+        const data = await res.json();
+        const visitorIp = data.ip;
+
+        await supabaseClient
+          .from('visitors')
+          .insert([
+            { 
+              ip_address: visitorIp, 
+              page_visited: window.location.pathname, 
+              user_agent: navigator.userAgent 
+            }
+          ]);
+      } catch (err) {
+        console.error("Tracker error:", err);
+      }
+    }
+    logVisitor();
+  </script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | Visitor Analytics</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+  <div id="login-screen" class="login-box">
+    <h2>Admin Login</h2>
+    <input type="password" id="admin-pass" placeholder="Enter Admin Password">
+    <button onclick="login()">Login</button>
+  </div>
+
+  <div id="dashboard" class="dashboard-box" style="display: none;">
+    <h2>Visitor Analytics Panel</h2>
+    <button onclick="loadLogs()" class="btn">Refresh Data</button>
+    <table border="1" class="admin-table">
+      <thead>
+        <tr>
+          <th>Date & Time</th>
+          <th>IP Address</th>
+          <th>Page Visited</th>
+          <th>User Agent / Device</th>
+        </tr>
+      </thead>
+      <tbody id="logs-body">
+        <tr><td colspan="4">Loading visitor records...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    const SUPABASE_URL = "YOUR_SUPABASE_URL";
+    const SUPABASE_KEY = "YOUR_SUPABASE_ANON_KEY";
+    const ADMIN_PASS = "admin123"; // Change this password!
+
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    function login() {
+      const pass = document.getElementById("admin-pass").value;
+      if (pass === ADMIN_PASS) {
+        document.getElementById("login-screen").style.display = "none";
+        document.getElementById("dashboard").style.display = "block";
+        loadLogs();
+      } else {
+        alert("Incorrect password!");
+      }
+    }
+
+    async function loadLogs() {
+      const tbody = document.getElementById("logs-body");
+      tbody.innerHTML = "<tr><td colspan='4'>Fetching...</td></tr>";
+
+      const { data, error } = await supabaseClient
+        .from('visitors')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        tbody.innerHTML = `<tr><td colspan='4'>Error: ${error.message}</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = "";
+      data.forEach(row => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${new Date(row.created_at).toLocaleString()}</td>
+          <td>${row.ip_address}</td>
+          <td>${row.page_visited}</td>
+          <td>${row.user_agent}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+  </script>
+</body>
+</html>
