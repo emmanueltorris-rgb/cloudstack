@@ -631,6 +631,34 @@ textarea {
   font-size: 0.9rem;
 }
 
+.whatsapp-float {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 9999;
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #25d366;
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.whatsapp-float:hover,
+.whatsapp-float:focus-visible {
+  transform: translateY(-4px) scale(1.08);
+  box-shadow: 0 8px 18px rgba(37, 211, 102, 0.45);
+}
+
+.whatsapp-float svg {
+  width: 26px;
+  height: 26px;
+  fill: currentColor;
+}
+
 .toast {
   position: fixed;
   right: 1.5rem;
@@ -1027,6 +1055,13 @@ textarea {
 
   .contact-list li {
     font-size: 0.85rem;
+  }
+
+  .whatsapp-float {
+    right: 16px;
+    bottom: 16px;
+    width: 56px;
+    height: 56px;
   }
 
   .site-footer {
