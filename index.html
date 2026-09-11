@@ -5,22 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Emmanuel Torris — full-stack engineer and networking specialist building resilient digital systems."
+      content="Cloudstack — full-stack engineer and networking specialist building resilient digital systems."
     />
-    <title>Emmanuel Torris | Portfolio</title>
+    <title>Cloudstack | Portfolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css?v=20260911-1" />
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script>
-      window.APP_CONFIG = {
-        supabaseUrl: "https://vvfpasaxdprocroezwja.supabase.co",
-        supabaseAnonKey: "sb_publishable_ezbVG9sz0ea-dLS7-_Dnww_FK38MDjl",
-      };
-      window.SUPABASE_URL = window.APP_CONFIG.supabaseUrl;
-      window.SUPABASE_ANON_KEY = window.APP_CONFIG.supabaseAnonKey;
-    </script>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <div class="shell">
@@ -75,16 +66,190 @@
 
           <div class="project-group">
             <div class="group-title-row">
-              <h3>Full-Stack & Software Development</h3>
+              <h3>Full-Stack &amp; Software Development</h3>
             </div>
-            <div id="software-projects" class="project-grid" aria-live="polite"></div>
+            <div class="project-grid" aria-live="polite">
+              <article class="project-card">
+                <div class="card-top">
+                  <span class="tag-pill">React + PostgreSQL</span>
+                  <span class="status-pill">✓ Dashboard &amp; Live Link</span>
+                </div>
+                <div>
+                  <h3>LearnCode</h3>
+                  <div class="project-role">Lead Developer (Solo Project)</div>
+                </div>
+                <p>
+                  A sleek, fully functional peer learning platform designed for tech students to share notes,
+                  tutorials, and collaborate asynchronously.
+                </p>
+                <div class="tech-stack">
+                  <span class="tech-tag">React</span>
+                  <span class="tech-tag">Vite</span>
+                  <span class="tech-tag">Tailwind CSS</span>
+                  <span class="tech-tag">GoBackend (Fiber)</span>
+                </div>
+              </article>
+
+              <article class="project-card">
+                <div class="card-top">
+                  <span class="tag-pill">Full-Stack</span>
+                  <span class="status-pill">✓ Backend Deployed</span>
+                </div>
+                <div>
+                  <h3>HotelBook</h3>
+                  <div class="project-role">Full-Stack Developer</div>
+                </div>
+                <p>
+                  Complete hotel booking and management system with seamless authentication flow and integrated
+                  M-Pesa STK Push payment gateway for instant confirmations.
+                </p>
+                <div class="tech-stack">
+                  <span class="tech-tag">React</span>
+                  <span class="tech-tag">Tailwind CSS</span>
+                  <span class="tech-tag">Firebase / SQL</span>
+                  <span class="tech-tag">Express</span>
+                  <span class="tech-tag">M-Pesa API</span>
+                </div>
+              </article>
+
+              <article class="project-card">
+                <div class="card-top">
+                  <span class="tag-pill">React + State Management</span>
+                  <span class="status-pill">✓ Completed &amp; Preserved</span>
+                </div>
+                <div>
+                  <h3>Interactive Voting Poll</h3>
+                  <div class="project-role">Frontend &amp; State Architect (Group Project)</div>
+                </div>
+                <p>
+                  Modern voting and polling web application with core state management and component architecture
+                  to keep user votes accurate across sessions.
+                </p>
+                <div class="tech-stack">
+                  <span class="tech-tag">React</span>
+                  <span class="tech-tag">Tailwind CSS</span>
+                  <span class="tech-tag">Zustand</span>
+                  <span class="tech-tag">State Management</span>
+                </div>
+              </article>
+
+              <article class="project-card">
+                <div class="card-top">
+                  <span class="tag-pill">React / Labs</span>
+                  <span class="status-pill">✓ Completed</span>
+                </div>
+                <div>
+                  <h3>Plantshop</h3>
+                  <div class="project-role">Developer</div>
+                </div>
+                <p>
+                  E-commerce lab assignment focused on mastering React hooks, managing local cart states, and
+                  building responsive UI layouts.
+                </p>
+                <div class="tech-stack">
+                  <span class="tech-tag">React</span>
+                  <span class="tech-tag">Zustand</span>
+                  <span class="tech-tag">Context API</span>
+                </div>
+              </article>
+            </div>
           </div>
 
           <div class="project-group">
             <div class="group-title-row">
-              <h3>Networking & Infrastructure</h3>
+              <h3>Networking &amp; Infrastructure (Hyptech Networks)</h3>
             </div>
-            <div id="infrastructure-projects" class="project-grid" aria-live="polite"></div>
+            <div class="project-grid" aria-live="polite">
+              <article class="project-card">
+                <div class="card-top">
+                  <span class="tag-pill">Infrastructure</span>
+                  <span class="status-pill">✓ Active Deployment</span>
+                </div>
+                <div>
+                  <h3>Client VPN Routing</h3>
+                  <div class="project-role">Infrastructure Engineer</div>
+                </div>
+                <p>
+                  Deploying secure, isolated virtual private networks on client-edge routers to protect business
+                  data traffic and optimize local routing configurations.
+                </p>
+                <div class="tech-stack">
+                  <span class="tech-tag">MikroTik RouterOS</span>
+                  <span class="tech-tag">VPN Setup</span>
+                  <span class="tech-tag">Linux</span>
+                  <span class="tech-tag">Edge Deployment</span>
+                </div>
+              </article>
+
+              <article class="project-card">
+                <div class="card-top">
+                  <span class="tag-pill">Enterprise Infrastructure</span>
+                  <span class="status-pill">✓ Production Ready</span>
+                </div>
+                <div>
+                  <h3>Starlink Commercial Architecture</h3>
+                  <div class="project-role">Infrastructure Designer &amp; Implementer</div>
+                </div>
+                <p>
+                  Designing customized, high-capacity wireless architectures for recreational parks and hospitality
+                  environments with smart bandwidth capping, client isolation, and M-Pesa billing.
+                </p>
+                <div class="tech-stack">
+                  <span class="tech-tag">Starlink Gen 2/3</span>
+                  <span class="tech-tag">MikroTik Gateway</span>
+                  <span class="tech-tag">PoE Switching</span>
+                  <span class="tech-tag">Access Points</span>
+                  <span class="tech-tag">M-Pesa Integration</span>
+                </div>
+              </article>
+
+              <article class="project-card">
+                <div class="card-top">
+                  <span class="tag-pill">WiFi Infrastructure</span>
+                  <span class="status-pill">✓ Active Operations</span>
+                </div>
+                <div>
+                  <h3>Managed Wi-Fi Infrastructure &amp; Network Deployments</h3>
+                  <div class="project-role">Network Architect &amp; Deployment Engineer</div>
+                </div>
+                <p>
+                  Expanding high-speed connectivity across the Narok region through end-to-end local Wi-Fi
+                  architecture. Specialized in deploying managed access points, optimizing channel interference, and
+                  establishing secure guest/private network segregation.
+                </p>
+                <div class="tech-stack">
+                  <span class="tech-tag">Managed Access Points</span>
+                  <span class="tech-tag">Bandwidth Management</span>
+                  <span class="tech-tag">Channel Optimization</span>
+                  <span class="tech-tag">Network Segregation</span>
+                  <span class="tech-tag">Commercial Deployment</span>
+                </div>
+              </article>
+
+              <article class="project-card">
+                <div class="card-top">
+                  <span class="tag-pill">Security Infrastructure</span>
+                  <span class="status-pill">✓ Multiple Deployments</span>
+                </div>
+                <div>
+                  <h3>Full-Spectrum CCTV Surveillance Systems</h3>
+                  <div class="project-role">Security Systems Designer &amp; Implementer</div>
+                </div>
+                <p>
+                  Designing and deploying end-to-end security surveillance solutions across Narok. Handling all
+                  camera topologies, including High-Definition IP systems, Analog HD-TVI systems, Smart PTZ tracking
+                  cameras, and off-grid Solar/Wireless setups.
+                </p>
+                <div class="tech-stack">
+                  <span class="tech-tag">HD-IP Cameras</span>
+                  <span class="tech-tag">Analog HD-TVI</span>
+                  <span class="tech-tag">Smart PTZ Control</span>
+                  <span class="tech-tag">Solar/Wireless</span>
+                  <span class="tech-tag">NVR/DVR Setup</span>
+                  <span class="tech-tag">Remote Tracking</span>
+                </div>
+              </article>
+            </div>
           </div>
         </section>
 
@@ -97,8 +262,8 @@
           <div class="contact-panel">
             <div class="contact-copy">
               <p>
-                Need a technical partner to design, deploy, or optimize your platform?
-                Share a quick summary and I’ll respond with the most practical next steps.
+                Need a technical partner to design, deploy, or optimize your platform? Share a quick summary and
+                I’ll respond with the most practical next steps.
               </p>
               <ul class="contact-list">
                 <li><span>Focus</span> Web platforms, network operations, product strategy</li>
@@ -109,7 +274,7 @@
             </div>
 
             <form id="contact-form" class="contact-form" novalidate>
-              <div class="form-grid">
+              <div class="form-grid two-col">
                 <div class="field">
                   <label for="name">Name</label>
                   <input id="name" name="name" type="text" placeholder="Your name" required />
@@ -144,6 +309,44 @@
 
     <div id="toast" class="toast" aria-live="polite"></div>
 
-    <script src="app.js?v=20260911-1" defer></script>
+    <script>
+      const toast = document.getElementById('toast');
+      const contactForm = document.getElementById('contact-form');
+
+      function showToast(message, type = 'success') {
+        if (!toast) return;
+        toast.textContent = message;
+        toast.className = `toast show ${type}`;
+        clearTimeout(showToast.timeoutId);
+        showToast.timeoutId = setTimeout(() => {
+          toast.className = 'toast';
+        }, 2500);
+      }
+
+      if (contactForm) {
+        contactForm.addEventListener('submit', (event) => {
+          event.preventDefault();
+
+          const name = document.getElementById('name').value.trim();
+          const email = document.getElementById('email').value.trim();
+          const subject = document.getElementById('subject').value.trim();
+          const message = document.getElementById('message').value.trim();
+
+          if (!name || !email || !subject || !message) {
+            showToast('Please complete all contact fields.', 'error');
+            return;
+          }
+
+          const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailPattern.test(email)) {
+            showToast('Please provide a valid email address.', 'error');
+            return;
+          }
+
+          contactForm.reset();
+          showToast('Message submitted successfully.', 'success');
+        });
+      }
+    </script>
   </body>
 </html>
