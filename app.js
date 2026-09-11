@@ -1,6 +1,18 @@
-const SUPABASE_URL = window.SUPABASE_URL || "";
-const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || "";
-const supabase = SUPABASE_URL && SUPABASE_ANON_KEY ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+function normalizeSupabaseUrl(value = "") {
+  return String(value || "").trim().replace(/\/rest\/v1\/?$/, "").replace(/\/+$/, "");
+}
+
+const appConfig = window.APP_CONFIG || {};
+const SUPABASE_URL = normalizeSupabaseUrl(appConfig.supabaseUrl || window.SUPABASE_URL || "");
+const SUPABASE_ANON_KEY = String(appConfig.supabaseAnonKey || window.SUPABASE_ANON_KEY || "").trim();
+
+const hasValidSupabaseConfig = Boolean(
+  SUPABASE_URL &&
+    SUPABASE_ANON_KEY &&
+    /^https:\/\/[a-z0-9-]+\.[a-z0-9.-]+\.[a-z]{2,}(?:\/[\w.-]*)*$/i.test(SUPABASE_URL)
+);
+
+const supabase = hasValidSupabaseConfig ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 
 const toastEl = document.getElementById("toast");
 

@@ -1,7 +1,32 @@
-const ADMIN_PASSWORD = window.ADMIN_PASSWORD || "admin123";
-const SUPABASE_URL = window.SUPABASE_URL || "";
-const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || "";
-const supabase = SUPABASE_URL && SUPABASE_ANON_KEY ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+function normalizeSupabaseUrl(value = "") {
+  return String(value || "").trim().replace(/\/rest\/v1\/?$/, "").replace(/\/+$/, "");
+}
+
+const appConfig = window.APP_CONFIG || {};
+const ADMIN_PASSWORD_STORAGE_KEY = "torris-admin-password";
+
+function getStoredAdminPassword() {
+  const saved = localStorage.getItem(ADMIN_PASSWORD_STORAGE_KEY);
+  if (saved && saved.trim()) return saved.trim();
+
+  const defaultPassword = String(appConfig.adminPassword || window.ADMIN_PASSWORD || "admin123").trim();
+  if (defaultPassword) {
+    localStorage.setItem(ADMIN_PASSWORD_STORAGE_KEY, defaultPassword);
+  }
+  return defaultPassword;
+}
+
+let ADMIN_PASSWORD = getStoredAdminPassword();
+const SUPABASE_URL = normalizeSupabaseUrl(appConfig.supabaseUrl || window.SUPABASE_URL || "");
+const SUPABASE_ANON_KEY = String(appConfig.supabaseAnonKey || window.SUPABASE_ANON_KEY || "").trim();
+
+const hasValidSupabaseConfig = Boolean(
+  SUPABASE_URL &&
+    SUPABASE_ANON_KEY &&
+    /^https:\/\/[a-z0-9-]+\.[a-z0-9.-]+\.[a-z]{2,}(?:\/[\w.-]*)*$/i.test(SUPABASE_URL)
+);
+
+const supabase = hasValidSupabaseConfig ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 
 const state = {
   auth: localStorage.getItem("torris-admin-auth") === "true",
@@ -23,6 +48,9 @@ const lastSync = document.getElementById("last-sync");
 const visitorTableBody = document.getElementById("visitor-table-body");
 const projectModal = document.getElementById("project-modal");
 const projectForm = document.getElementById("project-form");
+const passwordForm = document.getElementById("password-form");
+const newPasswordInput = document.getElementById("new-admin-password");
+const confirmPasswordInput = document.getElementById("confirm-admin-password");
 const newProjectBtn = document.getElementById("new-project-btn");
 const closeModalBtn = document.getElementById("close-modal-btn");
 const cancelProjectBtn = document.getElementById("cancel-project-btn");
@@ -70,6 +98,38 @@ function handleLogin() {
 
 function handleLogout() {
   setAuthenticated(false);
+}
+
+function handlePasswordUpdate(event) {
+  event.preventDefault();
+
+  if (!newPasswordInput || !confirmPasswordInput) return;
+
+  const nextPassword = newPasswordInput.value.trim();
+  const confirmPassword = confirmPasswordInput.value.trim();
+
+  if (!nextPassword || !confirmPassword) {
+    showToast("Enter and confirm a new password.", "error");
+    return;
+  }
+
+  if (nextPassword.length < 4) {
+    showToast("Password must be at least 4 characters.", "error");
+    return;
+  }
+
+  if (nextPassword !== confirmPassword) {
+    showToast("Passwords do not match.", "error");
+    return;
+  }
+
+  ADMIN_PASSWORD = nextPassword;
+  localStorage.setItem(ADMIN_PASSWORD_STORAGE_KEY, nextPassword);
+  if (window.APP_CONFIG) window.APP_CONFIG.adminPassword = nextPassword;
+  if (window.ADMIN_PASSWORD) window.ADMIN_PASSWORD = nextPassword;
+
+  passwordForm.reset();
+  showToast("Admin password updated.", "success");
 }
 
 function escapeHtml(value = "") {
@@ -333,6 +393,7 @@ if (newProjectBtn) newProjectBtn.addEventListener("click", () => openProjectModa
 if (closeModalBtn) closeModalBtn.addEventListener("click", closeProjectModal);
 if (cancelProjectBtn) cancelProjectBtn.addEventListener("click", closeProjectModal);
 if (projectForm) projectForm.addEventListener("submit", handleProjectSubmit);
+if (passwordForm) passwordForm.addEventListener("submit", handlePasswordUpdate);
 if (projectModal) {
   projectModal.addEventListener("click", (event) => {
     if (event.target && event.target.dataset.close === "true") {

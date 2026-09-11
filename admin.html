@@ -10,9 +10,14 @@
     <link rel="stylesheet" href="style.css" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-      window.SUPABASE_URL = "https://vvfpasaxdprocroezwja.supabase.co/rest/v1/";
-      window.SUPABASE_ANON_KEY = "sb_publishable_ezbVG9sz0ea-dLS7-_Dnww_FK38MDjl";
-      window.ADMIN_PASSWORD = "admin123";
+      window.APP_CONFIG = {
+        supabaseUrl: "https://vvfpasaxdprocroezwja.supabase.co",
+        supabaseAnonKey: "sb_publishable_ezbVG9sz0ea-dLS7-_Dnww_FK38MDjl",
+        adminPassword: "admin123",
+      };
+      window.SUPABASE_URL = window.APP_CONFIG.supabaseUrl;
+      window.SUPABASE_ANON_KEY = window.APP_CONFIG.supabaseAnonKey;
+      window.ADMIN_PASSWORD = window.APP_CONFIG.adminPassword;
     </script>
   </head>
   <body class="admin-body">
@@ -62,6 +67,29 @@
               <strong id="last-sync">--</strong>
             </div>
           </div>
+
+          <section class="panel admin-panel-block">
+            <div class="panel-toolbar">
+              <h2>Security</h2>
+            </div>
+
+            <form id="password-form" class="project-form">
+              <div class="form-grid two-col">
+                <div class="field">
+                  <label for="new-admin-password">New Password</label>
+                  <input id="new-admin-password" name="newPassword" type="password" placeholder="Enter new password" />
+                </div>
+                <div class="field">
+                  <label for="confirm-admin-password">Confirm Password</label>
+                  <input id="confirm-admin-password" name="confirmPassword" type="password" placeholder="Confirm password" />
+                </div>
+              </div>
+
+              <div class="modal-actions">
+                <button type="submit" class="btn btn-secondary">Update Password</button>
+              </div>
+            </form>
+          </section>
 
           <section class="panel admin-panel-block">
             <div class="panel-toolbar">
