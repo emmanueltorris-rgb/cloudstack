@@ -50,6 +50,7 @@ const lastSync = document.getElementById("last-sync");
 const visitorTableBody = document.getElementById("visitor-table-body");
 const projectModal = document.getElementById("project-modal");
 const projectForm = document.getElementById("project-form");
+const projectSubmitBtn = projectForm ? projectForm.querySelector('button[type="submit"]') : null;
 const passwordForm = document.getElementById("password-form");
 const newPasswordInput = document.getElementById("new-admin-password");
 const confirmPasswordInput = document.getElementById("confirm-admin-password");
@@ -175,6 +176,13 @@ function formatDate(value) {
   }
 }
 
+function setProjectSubmitLoading(isLoading) {
+  if (!projectSubmitBtn) return;
+
+  projectSubmitBtn.disabled = isLoading;
+  projectSubmitBtn.textContent = isLoading ? "Saving..." : projectSubmitBtn.dataset.defaultText || "Save Project";
+}
+
 function openProjectModal(project = null) {
   if (!projectModal || !projectForm) return;
 
@@ -186,8 +194,14 @@ function openProjectModal(project = null) {
   const topTag = document.getElementById("project-top-tag");
   const description = document.getElementById("project-description");
   const techStack = document.getElementById("project-tech-stack");
+  const imageUrl = document.getElementById("project-image-url");
+  const projectUrl = document.getElementById("project-link");
   const liveUrl = document.getElementById("project-live-url");
   const statusLabel = document.getElementById("project-status-label");
+
+  if (projectSubmitBtn && !projectSubmitBtn.dataset.defaultText) {
+    projectSubmitBtn.dataset.defaultText = projectSubmitBtn.textContent || "Save Project";
+  }
 
   if (project) {
     projectId.value = project.id || "";
@@ -197,7 +211,9 @@ function openProjectModal(project = null) {
     topTag.value = project.top_tag || "";
     description.value = project.description || "";
     techStack.value = Array.isArray(project.tech_stack) ? project.tech_stack.join(", ") : "";
-    liveUrl.value = project.live_url || "";
+    imageUrl.value = project.image_url || project.image || "";
+    projectUrl.value = project.project_url || project.live_url || "";
+    liveUrl.value = project.live_url || project.project_url || "";
     statusLabel.value = project.status_label || "";
     if (modalTitle) modalTitle.textContent = "Edit Project";
   } else {
@@ -207,6 +223,7 @@ function openProjectModal(project = null) {
     if (modalTitle) modalTitle.textContent = "Add Project";
   }
 
+  setProjectSubmitLoading(false);
   projectModal.classList.remove("hidden");
   projectModal.setAttribute("aria-hidden", "false");
 }
@@ -351,14 +368,23 @@ async function handleProjectSubmit(event) {
 
   const formData = new FormData(projectForm);
   const projectId = document.getElementById("project-id").value;
+
+  const title = String(formData.get("title") || "").trim();
+  const description = String(formData.get("description") || "").trim();
+  const imageUrl = String(formData.get("image_url") || "").trim();
+  const projectUrl = String(formData.get("project_url") || "").trim();
+  const liveUrl = String(formData.get("live_url") || projectUrl || "").trim();
+
   const payload = {
-    title: String(formData.get("title") || "").trim(),
+    title,
     subtitle: String(formData.get("subtitle") || "").trim(),
     category: String(formData.get("category") || "software").trim(),
     top_tag: String(formData.get("top_tag") || "").trim(),
-    description: String(formData.get("description") || "").trim(),
+    description,
     tech_stack: parseTechStack(formData.get("tech_stack")),
-    live_url: String(formData.get("live_url") || "").trim(),
+    image_url: imageUrl,
+    project_url: projectUrl || liveUrl,
+    live_url: liveUrl,
     status_label: String(formData.get("status_label") || "").trim() || "✓ Active Deployment",
   };
 
@@ -367,22 +393,36 @@ async function handleProjectSubmit(event) {
     return;
   }
 
+  setProjectSubmitLoading(true);
+
   try {
     if (projectId) {
       const { error } = await supabaseClient.from("projects").update(payload).eq("id", projectId);
       if (error) throw error;
       showToast("Project updated successfully.", "success");
     } else {
-      const { error } = await supabaseClient.from("projects").insert([payload]);
+      const { data, error } = await supabaseClient.from("projects").insert([
+        {
+          title: payload.title,
+          description: payload.description,
+          image_url: payload.image_url,
+          project_url: payload.project_url,
+          live_url: payload.live_url,
+        },
+      ]);
       if (error) throw error;
       showToast("Project created successfully.", "success");
     }
 
+    projectForm.reset();
     closeProjectModal();
     await refreshData();
   } catch (error) {
     console.error("Project save failed:", error);
-    showToast("Project save failed.", "error");
+    const message = error?.message || "Project save failed.";
+    showToast(message, "error");
+  } finally {
+    setProjectSubmitLoading(false);
   }
 }
 
