@@ -27,7 +27,7 @@ const hasValidSupabaseConfig = Boolean(
     /^https:\/\/[a-z0-9-]+\.[a-z0-9.-]+\.[a-z]{2,}(?:\/[\w.-]*)*$/i.test(SUPABASE_URL)
 );
 
-const supabase = hasValidSupabaseConfig ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+const supabaseClient = window.supabase && hasValidSupabaseConfig ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 
 const state = {
   auth: localStorage.getItem("torris-admin-auth") === "true",
@@ -277,13 +277,13 @@ function renderProjects() {
 }
 
 async function loadProjects() {
-  if (!supabase) {
+  if (!supabaseClient) {
     showToast("Supabase is missing configuration.", "error");
     return;
   }
 
   try {
-    const { data, error } = await supabase.from("projects").select("*").order("created_at", { ascending: false });
+    const { data, error } = await supabaseClient.from("projects").select("*").order("created_at", { ascending: false });
     if (error) throw error;
     state.projects = data || [];
     renderProjects();
@@ -294,7 +294,7 @@ async function loadProjects() {
 }
 
 async function loadVisitors() {
-  if (!supabase) {
+  if (!supabaseClient) {
     if (visitorTableBody) {
       visitorTableBody.innerHTML = '<tr><td colspan="4">Supabase not configured.</td></tr>';
     }
@@ -302,7 +302,7 @@ async function loadVisitors() {
   }
 
   try {
-    const { data, error } = await supabase.from("visitors").select("*").order("created_at", { ascending: false }).limit(50);
+    const { data, error } = await supabaseClient.from("visitors").select("*").order("created_at", { ascending: false }).limit(50);
     if (error) throw error;
 
     state.visitors = data || [];
@@ -344,7 +344,7 @@ async function refreshData() {
 async function handleProjectSubmit(event) {
   event.preventDefault();
 
-  if (!supabase) {
+  if (!supabaseClient) {
     showToast("Supabase is not configured.", "error");
     return;
   }
@@ -369,11 +369,11 @@ async function handleProjectSubmit(event) {
 
   try {
     if (projectId) {
-      const { error } = await supabase.from("projects").update(payload).eq("id", projectId);
+      const { error } = await supabaseClient.from("projects").update(payload).eq("id", projectId);
       if (error) throw error;
       showToast("Project updated successfully.", "success");
     } else {
-      const { error } = await supabase.from("projects").insert([payload]);
+      const { error } = await supabaseClient.from("projects").insert([payload]);
       if (error) throw error;
       showToast("Project created successfully.", "success");
     }
@@ -387,13 +387,13 @@ async function handleProjectSubmit(event) {
 }
 
 async function deleteProject(id) {
-  if (!supabase) {
+  if (!supabaseClient) {
     showToast("Supabase is not configured.", "error");
     return;
   }
 
   try {
-    const { error } = await supabase.from("projects").delete().eq("id", id);
+    const { error } = await supabaseClient.from("projects").delete().eq("id", id);
     if (error) throw error;
     showToast("Project deleted.", "success");
     await refreshData();
